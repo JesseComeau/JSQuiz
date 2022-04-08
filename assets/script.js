@@ -1,34 +1,31 @@
 var startButtonEl = document.getElementById("startButton");
+var questionEl = document.getElementById("question");
 var option1El = document.getElementById("option1");
 var option2El = document.getElementById("option2");
 var option3El = document.getElementById("option3");
 var option4El = document.getElementById("option4");
+var infoEl = document.getElementById("info");
+var savedScores = JSON.parse(localStorage.getItem("scores"))
+var saveButtonEl = document.getElementById("saveButton");
+var initialsEl = document.getElementById("initials");
+var clearButtonEl = document.getElementById("clearButton");
+
+var answer = '';
+var index = '';
+var sec = '';
+var timerStart = '';
+var score = ''
+var initials = '';
+
+clearButtonEl.addEventListener("click", clearLocalStorage)
+saveButtonEl.addEventListener("click", localStorageSave);
 option1El.addEventListener("click", checkSelection);
 option2El.addEventListener("click", checkSelection);
 option3El.addEventListener("click", checkSelection);
 option4El.addEventListener("click", checkSelection);
 startButtonEl.addEventListener("click", timer);
-let answer = "";
-let index = 0;
-var sec = '';
-timerStart = '';
 
-
-function timer() {
-    sec = 60;
-    startButtonEl.classList.add("d-none");
-    timerStart = setInterval(function () {
-        document.getElementById('timer').innerHTML = sec;
-        sec--;
-        if (sec < 0) {
-            clearInterval(timerStart);
-            endgame();
-            startButtonEl.classList.remove("d-none");
-        }
-    }, 1000);
-    playGame();
-}
-
+// Questions array
 const QA = [
     {
         question: "Inside which HTML element do we put the JavaScript?", answers: [
@@ -88,22 +85,47 @@ const QA = [
     }
 ]
 
-function playGame() {
-    index = 0;
-    document.getElementById("question").innerText = QA[index].question;
-    document.getElementById("option2").innerText = QA[index].answers[1].option;
-    document.getElementById("option3").innerText = QA[index].answers[2].option;
-    document.getElementById("option4").innerText = QA[index].answers[3].option;
-    document.getElementById("option1").innerText = QA[index].answers[0].option;
-
-    // document.getElementById("question").classList.replace("h3, h1")
-    document.getElementById("option1").classList.remove("d-none");
-    document.getElementById("option2").classList.remove("d-none");
-    document.getElementById("option3").classList.remove("d-none");
-    document.getElementById("option4").classList.remove("d-none");
-    checkAnswer()
+// Function to set and siplay the timer
+function timer() {
+    document.getElementById('timer').classList.remove('d-none')
+    clearButtonEl.classList.add('d-none')
+    sec = 60;
+    startButtonEl.classList.add("d-none");
+    timerStart = setInterval(() => {
+        document.getElementById('timer').innerHTML = sec;
+        sec--;
+        if (sec < 0) {
+            clearInterval(timerStart);
+            endgame();
+            startButtonEl.classList.remove("d-none");
+        }
+    }, 1000);
+    playGame()
 }
 
+// Function to start the game -- Adding buttons for answers with predefined questions text
+function playGame() {
+    index = 0;
+    questionEl.innerText = QA[index].question;
+    option1El.innerText = QA[index].answers[0].option;
+    option2El.innerText = QA[index].answers[1].option;
+    option3El.innerText = QA[index].answers[2].option;
+    option4El.innerText = QA[index].answers[3].option;
+
+    document.getElementById("info").classList.add("d-none")
+
+    document.getElementById("scoreTable").classList.add("d-none");
+
+    questionEl.classList.remove("d-none");
+    option1El.classList.remove("d-none");
+    option2El.classList.remove("d-none");
+    option3El.classList.remove("d-none");
+    option4El.classList.remove("d-none");
+    checkAnswer()
+    
+}
+
+// Function to set the correct answer button.
 function checkAnswer() {
     for (let i = 0; i < 4; i++) {
         if (QA[index].answers[i].correct) {
@@ -112,19 +134,29 @@ function checkAnswer() {
     }
 }
 
+// Function to end the game based on no more questions or timer => 0 -- hides answer buttons
 function endgame() {
-    document.getElementById("option2").classList.add("d-none");
-    document.getElementById("option1").classList.add("d-none");
-    document.getElementById("option3").classList.add("d-none");
-    document.getElementById("option4").classList.add("d-none");
+    questionEl.classList.add("d-none");
+    option1El.classList.add("d-none");
+    option2El.classList.add("d-none");
+    option3El.classList.add("d-none");
+    option4El.classList.add("d-none");
+    infoEl.classList.remove("d-none");
     if (sec > 0) {
-    document.getElementById("question").innerText = 'You Win';
+        infoEl.innerHTML = `You win with a score of <span class="text-danger">${sec + 1}</span>.
+<br>
+<br>
+<p class="h4">Enter your initials to save your score.</p>`;
+        document.getElementById("timer").classList.add("d-none")
+        document.getElementById("timer").classList.add("d-none")
+        saveScore()
     }
     else {
-        document.getElementById("question").innerText = 'You Lose'
+        questionEl.innerText = 'You Lose'
     }
 }
 
+// Function to check onclick input = answer -- remove 10 seconds if it is not the correct answer -- add class to change color of button
 function checkSelection() {
     if (answer == this.innerText) {
         this.classList.remove("btn-primary");
@@ -139,38 +171,129 @@ function checkSelection() {
     const reset = setTimeout(resetOptions, 500);
 }
 
+// Function to reset classes when new question appears
 function resetOptions() {
-    document.getElementById("option1").classList.replace("btn-danger", "btn-primary");
-    document.getElementById("option2").classList.replace("btn-danger", "btn-primary");
-    document.getElementById("option3").classList.replace("btn-danger", "btn-primary");
-    document.getElementById("option4").classList.replace("btn-danger", "btn-primary");
-    document.getElementById("option1").classList.replace("btn-success", "btn-primary");
-    document.getElementById("option2").classList.replace("btn-success", "btn-primary");
-    document.getElementById("option3").classList.replace("btn-success", "btn-primary");
-    document.getElementById("option4").classList.replace("btn-success", "btn-primary");
-    document.getElementById("option1").classList.add("btn-primary");
-    document.getElementById("option2").classList.add("btn-primary");
-    document.getElementById("option3").classList.add("btn-primary");
-    document.getElementById("option4").classList.add("btn-primary");
+    option1El.classList.replace("btn-danger", "btn-primary");
+    option2El.classList.replace("btn-danger", "btn-primary");
+    option3El.classList.replace("btn-danger", "btn-primary");
+    option4El.classList.replace("btn-danger", "btn-primary");
+    option1El.classList.replace("btn-success", "btn-primary");
+    option2El.classList.replace("btn-success", "btn-primary");
+    option3El.classList.replace("btn-success", "btn-primary");
+    option4El.classList.replace("btn-success", "btn-primary");
+
     if (index == (QA.length - 1)) {
-        console.log("game done")
         clearInterval(timerStart)
         endgame();
+        return;
 
     } if (sec <= 0) {
         endgame();
-    } 
+    }
     else {
         nextQuestion();
     }
 }
 
+// Function to call the next question
 function nextQuestion() {
     index++;
-    document.getElementById("question").innerText = QA[index].question;
-    document.getElementById("option2").innerText = QA[index].answers[1].option;
-    document.getElementById("option3").innerText = QA[index].answers[2].option;
-    document.getElementById("option4").innerText = QA[index].answers[3].option;
-    document.getElementById("option1").innerText = QA[index].answers[0].option;
+    questionEl.innerText = QA[index].question;
+    option1El.innerText = QA[index].answers[0].option;
+    option2El.innerText = QA[index].answers[1].option;
+    option3El.innerText = QA[index].answers[2].option;
+    option4El.innerText = QA[index].answers[3].option;
     checkAnswer()
+}
+
+
+// Function to save score with initials
+function saveScore() {
+    console.log("savedScore");
+    saveButtonEl.classList.remove("d-none");
+    initialsEl.classList.remove("d-none");
+    initialsEl.value = "";
+
+    let scoreString = JSON.stringify(savedScores)
+    localStorage.setItem("scores", scoreString)
+
+}
+
+function checkStorage() {
+    initials = initialsEl.value.toUpperCase()
+    score = {
+        time: (sec + 1),
+        initials: initials
+    }
+
+    if (savedScores == null) {
+        savedScores = []
+        savedScores.push(score);
+        console.log("null", savedScores);
+        saveScore();
+        retry();
+        return;
+    } else {
+        savedScores.push(score);
+        console.log("not-null", savedScores);
+        saveScore();
+        retry();
+        return;
+    }
+}
+
+
+function localStorageSave(event) {
+    event.preventDefault
+    console.log(score)
+    checkStorage()
+}
+
+function retry() {
+    document.getElementById("info").innerText = "Try Again?";
+    displayScores()
+
+}
+
+function displayScores() {
+    saveButtonEl.classList.add("d-none");
+    initialsEl.classList.add("d-none");
+    document.getElementById("info").classList.add("d-none");
+    startButtonEl.classList.remove("d-none");
+    document.getElementById("scoreTable").classList.remove("d-none");
+    document.getElementById("scores").innerHTML = '';
+    clearButtonEl.classList.remove("d-none");
+    if (savedScores != null) {
+        for (let i = 0; i < savedScores.length; i++) {
+            document.getElementById("scores").innerHTML += `<div class="row">
+        <div class="col">
+            ${savedScores[i].initials}
+        </div>
+        <div class="col">
+            ${savedScores[i].time}
+        </div>`
+        }
+    }
+}
+
+function clearDisplay() {
+    document.getElementById('timer').classList.add("d-none");
+    questionEl.classList.add("d-none");
+    option1El.classList.add("d-none");
+    option2El.classList.add("d-none");
+    option3El.classList.add("d-none");
+    option4El.classList.add("d-none");
+    infoEl.classList.remove("d-none");
+    clearInterval(timerStart)
+    displayScores()
+}
+
+function home() {
+    window.location.reload(true)
+}
+
+function clearLocalStorage() {
+    localStorage.removeItem("scores");
+    savedScores = []
+    displayScores();
 }
