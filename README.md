@@ -1,15 +1,15 @@
 
 # JSQuiz
 
-## Bootcamp - Phase 1 - Week 4 Homework
+### Bootcamp - Phase 1 - Week 4 Homework
 
-### Development
+## Development
 
-
-
+```
 Created a JavaScript Quiz utilizing a timer and countdown functionality. Saved scores and initials to lcoal storage to callback scores. Utilized an array of objects to store question data. Utilized bootstrap for CSS implementation with no custom CSS.
+```
 
-### User Story
+## User Story
 
 ```
 AS A coding boot camp student
@@ -17,7 +17,7 @@ I WANT to take a timed quiz on JavaScript fundamentals that stores high scores
 SO THAT I can gauge my progress compared to my peers
 ```
 
-### Acceptance Criteria
+## Acceptance Criteria
 
 ```
 GIVEN I am taking a code quiz
@@ -33,11 +33,11 @@ WHEN the game is over
 THEN I can save my initials and my score
 ```
 
-### Deployed Application
+## Deployed Application
 
 [Deployed Github Page](https://jessecomeau.github.io/JSQuiz/#)
 
-### Screenshot
+## Screenshot
 
 ![example](/assets/Example.jpg)
 
