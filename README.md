@@ -6,7 +6,10 @@
 ## Development
 
 ```
-Created a JavaScript Quiz utilizing a timer and countdown functionality. Saved scores and initials to lcoal storage to callback scores. Utilized an array of objects to store question data. Utilized bootstrap for CSS implementation with no custom CSS.
+Created a JavaScript Quiz utilizing a timer and countdown functionality. 
+Saved scores and initials to lcoal storage to callback scores. 
+Utilized an array of objects to store question data. 
+Utilized bootstrap for CSS implementation with no custom CSS.
 ```
 
 ## User Story
