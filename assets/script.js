@@ -89,7 +89,7 @@ const QA = [
 function timer() {
     document.getElementById('timer').classList.remove('d-none')
     clearButtonEl.classList.add('d-none')
-    sec = 10;
+    sec = 60;
     startButtonEl.classList.add("d-none");
     timerStart = setInterval(() => {
         document.getElementById('timer').innerHTML = sec;
