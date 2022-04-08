@@ -89,7 +89,7 @@ const QA = [
 function timer() {
     document.getElementById('timer').classList.remove('d-none')
     clearButtonEl.classList.add('d-none')
-    sec = 60;
+    sec = 10;
     startButtonEl.classList.add("d-none");
     timerStart = setInterval(() => {
         document.getElementById('timer').innerHTML = sec;
@@ -152,7 +152,7 @@ function endgame() {
         saveScore()
     }
     else {
-        questionEl.innerText = 'You Lose'
+        document.getElementById("info").innerText = 'You Lose, try again?'
     }
 }
 
